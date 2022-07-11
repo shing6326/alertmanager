@@ -391,7 +391,7 @@ func TestRetryStageWithError(t *testing.T) {
 		rs: sendResolved(false),
 	}
 	r := RetryStage{
-		integration: i,
+		integration: &i,
 		metrics:     NewMetrics(prometheus.NewRegistry()),
 	}
 
@@ -432,7 +432,7 @@ func TestRetryStageNoResolved(t *testing.T) {
 		rs: sendResolved(false),
 	}
 	r := RetryStage{
-		integration: i,
+		integration: &i,
 		metrics:     NewMetrics(prometheus.NewRegistry()),
 	}
 
@@ -486,7 +486,7 @@ func TestRetryStageSendResolved(t *testing.T) {
 		rs: sendResolved(true),
 	}
 	r := RetryStage{
-		integration: i,
+		integration: &i,
 		metrics:     NewMetrics(prometheus.NewRegistry()),
 	}
 

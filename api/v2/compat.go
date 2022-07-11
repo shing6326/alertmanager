@@ -125,7 +125,7 @@ func AlertToOpenAPIAlert(alert *types.Alert, status types.AlertStatus, receivers
 	apiReceivers := make([]*open_api_models.Receiver, 0, len(receivers))
 	for i := range receivers {
 		//TODO: Why have this changed? It is no longer a pointer for some reason?
-		apiReceivers = append(apiReceivers, &open_api_models.Receiver{Name: receivers[i]})
+		apiReceivers = append(apiReceivers, &open_api_models.Receiver{Name: &receivers[i]})
 	}
 
 	fp := alert.Fingerprint().String()

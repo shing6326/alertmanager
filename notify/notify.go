@@ -66,7 +66,7 @@ type Integration struct {
 	name     string
 	idx      int
 
-	mtx                sync.RWMutex
+	mtx                *sync.RWMutex
 	lastError          error
 	lastNotify         time.Time
 	lastNotifyDuration time.Duration
@@ -79,6 +79,7 @@ func NewIntegration(notifier Notifier, rs ResolvedSender, name string, idx int) 
 		rs:       rs,
 		name:     name,
 		idx:      idx,
+		mtx:      &sync.RWMutex{},
 	}
 }
 
@@ -371,7 +372,7 @@ func createReceiverStage(
 		var s MultiStage
 		s = append(s, NewWaitStage(wait))
 		s = append(s, NewDedupStage(&receiver.integrations[i], notificationLog, recv))
-		s = append(s, NewRetryStage(receiver.integrations[i], receiver, metrics))
+		s = append(s, NewRetryStage(&receiver.integrations[i], receiver, metrics))
 		s = append(s, NewSetNotifiesStage(notificationLog, recv))
 
 		fs = append(fs, s)
@@ -657,13 +658,13 @@ func (n *DedupStage) Exec(ctx context.Context, _ log.Logger, alerts ...*types.Al
 // RetryStage notifies via passed integration with exponential backoff until it
 // succeeds. It aborts if the context is canceled or timed out.
 type RetryStage struct {
-	integration Integration
+	integration *Integration
 	receiver    *Receiver
 	metrics     *Metrics
 }
 
 // NewRetryStage returns a new instance of a RetryStage.
-func NewRetryStage(i Integration, receiver *Receiver, metrics *Metrics) *RetryStage {
+func NewRetryStage(i *Integration, receiver *Receiver, metrics *Metrics) *RetryStage {
 	return &RetryStage{
 		integration: i,
 		receiver:    receiver,

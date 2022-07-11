@@ -602,7 +602,8 @@ func init() {
     "integration": {
       "type": "object",
       "required": [
-        "name"
+        "name",
+        "sendResolve"
       ],
       "properties": {
         "lastError": {
@@ -719,6 +720,11 @@ func init() {
     },
     "receiver": {
       "type": "object",
+      "required": [
+        "name",
+        "active",
+        "integrations"
+      ],
       "properties": {
         "active": {
           "type": "boolean"
@@ -1445,7 +1451,8 @@ func init() {
     "integration": {
       "type": "object",
       "required": [
-        "name"
+        "name",
+        "sendResolve"
       ],
       "properties": {
         "lastError": {
@@ -1562,6 +1569,11 @@ func init() {
     },
     "receiver": {
       "type": "object",
+      "required": [
+        "name",
+        "active",
+        "integrations"
+      ],
       "properties": {
         "active": {
           "type": "boolean"

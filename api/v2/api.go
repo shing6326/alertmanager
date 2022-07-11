@@ -218,9 +218,10 @@ func (api *API) getReceiversHandler(params receiver_ops.GetReceiversParams) midd
 		for _, integration := range r.Integrations() {
 			notify, duration, err := integration.GetReport()
 			iname := integration.String()
+			sendResolved := integration.SendResolved()
 			integrations = append(integrations, &open_api_models.Integration{
 				Name:               &iname,
-				SendResolve:        integration.SendResolved(),
+				SendResolve:        &sendResolved,
 				LastNotify:         notify.UTC().String(),
 				LastNotifyDuration: duration.String(),
 				//TODO: Last error should be optional.
@@ -233,9 +234,11 @@ func (api *API) getReceiversHandler(params receiver_ops.GetReceiversParams) midd
 			})
 		}
 
+		rName := r.Name()
+		active := r.Active()
 		model := &open_api_models.Receiver{
-			Name:         r.Name(),
-			Active:       r.Active(),
+			Name:         &rName,
+			Active:       &active,
 			Integrations: integrations,
 		}
 
@@ -421,7 +424,7 @@ func (api *API) getAlertGroupsHandler(params alertgroup_ops.GetAlertGroupsParams
 
 	for _, alertGroup := range alertGroups {
 		ag := &open_api_models.AlertGroup{
-			Receiver: &open_api_models.Receiver{Name: alertGroup.Receiver},
+			Receiver: &open_api_models.Receiver{Name: &alertGroup.Receiver},
 			Labels:   ModelLabelSetToAPILabelSet(alertGroup.Labels),
 			Alerts:   make([]*open_api_models.GettableAlert, 0, len(alertGroup.Alerts)),
 		}

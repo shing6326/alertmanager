@@ -45,7 +45,8 @@ type Integration struct {
 	Name *string `json:"name"`
 
 	// send resolve
-	SendResolve bool `json:"sendResolve,omitempty"`
+	// Required: true
+	SendResolve *bool `json:"sendResolve"`
 }
 
 // Validate validates this integration
@@ -53,6 +54,10 @@ func (m *Integration) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSendResolve(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -65,6 +70,15 @@ func (m *Integration) Validate(formats strfmt.Registry) error {
 func (m *Integration) validateName(formats strfmt.Registry) error {
 
 	if err := validate.Required("name", "body", m.Name); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Integration) validateSendResolve(formats strfmt.Registry) error {
+
+	if err := validate.Required("sendResolve", "body", m.SendResolve); err != nil {
 		return err
 	}
 
