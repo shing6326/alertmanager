@@ -224,7 +224,6 @@ func (api *API) getReceiversHandler(params receiver_ops.GetReceiversParams) midd
 				SendResolve:        &sendResolved,
 				LastNotify:         notify.UTC().String(),
 				LastNotifyDuration: duration.String(),
-				//TODO: Last error should be optional.
 				LastError: func() string {
 					if err != nil {
 						return err.Error()
