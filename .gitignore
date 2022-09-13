@@ -20,7 +20,3 @@
 !/.travis.yml
 !/.promu.yml
 !/api/v2/openapi.yaml
-
-# Editor
-.vscode
-.DS_Store
