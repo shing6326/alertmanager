@@ -388,12 +388,10 @@ func TestRetryStageWithError(t *testing.T) {
 		return false, nil
 	})
 	i := NewIntegration(notifier, sendResolved(false), "test integration", 1)
-	rcv := NewReceiver("test[0]", true, []Integration{i})
-
 	r := RetryStage{
-		integration: &i,
-		metrics:     NewMetrics(prometheus.NewRegistry()),
-		receiver:    rcv,
+		integration:  &i,
+		metrics:      NewMetrics(prometheus.NewRegistry()),
+		receiverName: "test[0]",
 	}
 
 	alerts := []*types.Alert{
@@ -438,11 +436,10 @@ func TestRetryStageNoResolved(t *testing.T) {
 		return false, nil
 	})
 	i := NewIntegration(notifier, sendResolved(false), "test integration", 1)
-	rcv := NewReceiver("test[0]", true, []Integration{i})
 	r := RetryStage{
-		integration: &i,
-		metrics:     NewMetrics(prometheus.NewRegistry()),
-		receiver:    rcv,
+		integration:  &i,
+		metrics:      NewMetrics(prometheus.NewRegistry()),
+		receiverName: "test[0]",
 	}
 
 	alerts := []*types.Alert{
@@ -496,11 +493,10 @@ func TestRetryStageSendResolved(t *testing.T) {
 		return false, nil
 	})
 	i := NewIntegration(notifier, sendResolved(true), "test integration", 1)
-	rcv := NewReceiver("test[0]", true, []Integration{i})
 	r := RetryStage{
-		integration: &i,
-		metrics:     NewMetrics(prometheus.NewRegistry()),
-		receiver:    rcv,
+		integration:  &i,
+		metrics:      NewMetrics(prometheus.NewRegistry()),
+		receiverName: "test[0]",
 	}
 
 	alerts := []*types.Alert{
