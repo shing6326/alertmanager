@@ -419,16 +419,16 @@ func run() int {
 
 		// Build the routing tree and record which receivers are used.
 		routes := dispatch.NewRoute(conf.Route, nil)
-		activeReceivers := make(map[string]struct{})
+		activeReceiversMap := make(map[string]struct{})
 		routes.Walk(func(r *dispatch.Route) {
-			activeReceivers[r.RouteOpts.Receiver] = struct{}{}
+			activeReceiversMap[r.RouteOpts.Receiver] = struct{}{}
 		})
 
 		// Build the map of receiver to integrations.
-		receivers := make([]*notify.Receiver, 0, len(activeReceivers))
+		receivers := make([]*notify.Receiver, 0, len(activeReceiversMap))
 		var integrationsNum int
 		for _, rcv := range conf.Receivers {
-			if _, found := activeReceivers[rcv.Name]; !found {
+			if _, found := activeReceiversMap[rcv.Name]; !found {
 				// No need to build a receiver if no route is using it.
 				level.Info(configLogger).Log("msg", "skipping creation of receiver not referenced by any route", "receiver", rcv.Name)
 				receivers = append(receivers, notify.NewReceiver(rcv.Name, false, nil))
@@ -466,17 +466,17 @@ func run() int {
 			pipelinePeer = peer
 		}
 
-		active := make([]*notify.Receiver, 0, len(receivers))
+		activeReceivers := make([]*notify.Receiver, 0, len(receivers))
 		for i := range receivers {
 			if !receivers[i].Active() {
 				continue
 			}
 
-			active = append(active, receivers[i])
+			activeReceivers = append(activeReceivers, receivers[i])
 		}
 
 		pipeline := pipelineBuilder.New(
-			active,
+			activeReceivers,
 			waitFunc,
 			inhibitor,
 			silencer,
@@ -484,7 +484,7 @@ func run() int {
 			notificationLog,
 			pipelinePeer,
 		)
-		configuredReceivers.Set(float64(len(activeReceivers)))
+		configuredReceivers.Set(float64(len(activeReceiversMap)))
 		configuredIntegrations.Set(float64(integrationsNum))
 
 		api.Update(conf, receivers, func(labels model.LabelSet) {
