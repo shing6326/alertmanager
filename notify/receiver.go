@@ -15,7 +15,7 @@ package notify
 
 type Receiver struct {
 	name         string
-	integrations []Integration
+	integrations []*Integration
 
 	// A receiver is considered active if a route is using it.
 	active bool
@@ -29,11 +29,11 @@ func (r *Receiver) Active() bool {
 	return r.active
 }
 
-func (r *Receiver) Integrations() []Integration {
+func (r *Receiver) Integrations() []*Integration {
 	return r.integrations
 }
 
-func NewReceiver(name string, active bool, integrations []Integration) *Receiver {
+func NewReceiver(name string, active bool, integrations []*Integration) *Receiver {
 	return &Receiver{
 		name:         name,
 		active:       active,

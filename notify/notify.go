@@ -66,20 +66,19 @@ type Integration struct {
 	name     string
 	idx      int
 
-	mtx                *sync.RWMutex
+	mtx                sync.RWMutex
 	lastError          error
 	lastNotify         time.Time
 	lastNotifyDuration time.Duration
 }
 
 // NewIntegration returns a new integration.
-func NewIntegration(notifier Notifier, rs ResolvedSender, name string, idx int) Integration {
-	return Integration{
+func NewIntegration(notifier Notifier, rs ResolvedSender, name string, idx int) *Integration {
+	return &Integration{
 		notifier: notifier,
 		rs:       rs,
 		name:     name,
 		idx:      idx,
-		mtx:      &sync.RWMutex{},
 	}
 }
 
@@ -371,8 +370,8 @@ func createReceiverStage(
 		}
 		var s MultiStage
 		s = append(s, NewWaitStage(wait))
-		s = append(s, NewDedupStage(&receiver.integrations[i], notificationLog, recv))
-		s = append(s, NewRetryStage(&receiver.integrations[i], receiver.name, metrics))
+		s = append(s, NewDedupStage(receiver.integrations[i], notificationLog, recv))
+		s = append(s, NewRetryStage(receiver.integrations[i], receiver.name, metrics))
 		s = append(s, NewSetNotifiesStage(notificationLog, recv))
 
 		fs = append(fs, s)
