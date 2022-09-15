@@ -657,17 +657,17 @@ func (n *DedupStage) Exec(ctx context.Context, _ log.Logger, alerts ...*types.Al
 // RetryStage notifies via passed integration with exponential backoff until it
 // succeeds. It aborts if the context is canceled or timed out.
 type RetryStage struct {
-	integration  *Integration
-	receiverName string
-	metrics      *Metrics
+	integration *Integration
+	groupName   string
+	metrics     *Metrics
 }
 
 // NewRetryStage returns a new instance of a RetryStage.
-func NewRetryStage(i *Integration, receiverName string, metrics *Metrics) *RetryStage {
+func NewRetryStage(i *Integration, groupName string, metrics *Metrics) *RetryStage {
 	return &RetryStage{
-		integration:  i,
-		receiverName: receiverName,
-		metrics:      metrics,
+		integration: i,
+		groupName:   groupName,
+		metrics:     metrics,
 	}
 }
 
@@ -713,7 +713,7 @@ func (r RetryStage) exec(ctx context.Context, l log.Logger, alerts ...*types.Ale
 		i    = 0
 		iErr error
 	)
-	l = log.With(l, "receiver", r.receiverName, "integration", r.integration.String())
+	l = log.With(l, "receiver", r.groupName, "integration", r.integration.String())
 
 	for {
 		i++
@@ -724,7 +724,7 @@ func (r RetryStage) exec(ctx context.Context, l log.Logger, alerts ...*types.Ale
 				iErr = ctx.Err()
 			}
 
-			return ctx, nil, errors.Wrapf(iErr, "%s/%s: notify retry canceled after %d attempts", r.receiverName, r.integration.String(), i)
+			return ctx, nil, errors.Wrapf(iErr, "%s/%s: notify retry canceled after %d attempts", r.groupName, r.integration.String(), i)
 		default:
 		}
 
@@ -740,7 +740,7 @@ func (r RetryStage) exec(ctx context.Context, l log.Logger, alerts ...*types.Ale
 			if err != nil {
 				r.metrics.numNotificationRequestsFailedTotal.WithLabelValues(r.integration.Name()).Inc()
 				if !retry {
-					return ctx, alerts, errors.Wrapf(err, "%s/%s: notify retry canceled due to unrecoverable error after %d attempts", r.receiverName, r.integration.String(), i)
+					return ctx, alerts, errors.Wrapf(err, "%s/%s: notify retry canceled due to unrecoverable error after %d attempts", r.groupName, r.integration.String(), i)
 				}
 				if ctx.Err() == nil && (iErr == nil || err.Error() != iErr.Error()) {
 					// Log the error if the context isn't done and the error isn't the same as before.
@@ -763,7 +763,7 @@ func (r RetryStage) exec(ctx context.Context, l log.Logger, alerts ...*types.Ale
 				iErr = ctx.Err()
 			}
 
-			return ctx, nil, errors.Wrapf(iErr, "%s/%s: notify retry canceled after %d attempts", r.receiverName, r.integration.String(), i)
+			return ctx, nil, errors.Wrapf(iErr, "%s/%s: notify retry canceled after %d attempts", r.groupName, r.integration.String(), i)
 		}
 	}
 }

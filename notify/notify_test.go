@@ -389,9 +389,9 @@ func TestRetryStageWithError(t *testing.T) {
 	})
 	i := NewIntegration(notifier, sendResolved(false), "test integration", 1)
 	r := RetryStage{
-		integration:  i,
-		metrics:      NewMetrics(prometheus.NewRegistry()),
-		receiverName: "test[0]",
+		integration: i,
+		metrics:     NewMetrics(prometheus.NewRegistry()),
+		groupName:   "test[0]",
 	}
 
 	alerts := []*types.Alert{
@@ -437,9 +437,9 @@ func TestRetryStageNoResolved(t *testing.T) {
 	})
 	i := NewIntegration(notifier, sendResolved(false), "test integration", 1)
 	r := RetryStage{
-		integration:  i,
-		metrics:      NewMetrics(prometheus.NewRegistry()),
-		receiverName: "test[0]",
+		integration: i,
+		metrics:     NewMetrics(prometheus.NewRegistry()),
+		groupName:   "test[0]",
 	}
 
 	alerts := []*types.Alert{
@@ -494,9 +494,9 @@ func TestRetryStageSendResolved(t *testing.T) {
 	})
 	i := NewIntegration(notifier, sendResolved(true), "test integration", 1)
 	r := RetryStage{
-		integration:  i,
-		metrics:      NewMetrics(prometheus.NewRegistry()),
-		receiverName: "test[0]",
+		integration: i,
+		metrics:     NewMetrics(prometheus.NewRegistry()),
+		groupName:   "test[0]",
 	}
 
 	alerts := []*types.Alert{
