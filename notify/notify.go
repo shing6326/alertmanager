@@ -349,7 +349,7 @@ func (pb *PipelineBuilder) New(receivers []*Receiver, wait func() time.Duration,
 
 	for _, r := range receivers {
 		st := createReceiverStage(r, wait, notificationLog, pb.metrics)
-		rs[r.name] = MultiStage{ms, is, tas, tms, ss, st}
+		rs[r.groupName] = MultiStage{ms, is, tas, tms, ss, st}
 	}
 	return rs
 }
@@ -364,14 +364,14 @@ func createReceiverStage(
 	var fs FanoutStage
 	for i := range receiver.integrations {
 		recv := &nflogpb.Receiver{
-			GroupName:   receiver.name,
+			GroupName:   receiver.groupName,
 			Integration: receiver.integrations[i].Name(),
 			Idx:         uint32(receiver.integrations[i].Index()),
 		}
 		var s MultiStage
 		s = append(s, NewWaitStage(wait))
 		s = append(s, NewDedupStage(receiver.integrations[i], notificationLog, recv))
-		s = append(s, NewRetryStage(receiver.integrations[i], receiver.name, metrics))
+		s = append(s, NewRetryStage(receiver.integrations[i], receiver.groupName, metrics))
 		s = append(s, NewSetNotifiesStage(notificationLog, recv))
 
 		fs = append(fs, s)
