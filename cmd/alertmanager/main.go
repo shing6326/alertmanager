@@ -471,7 +471,6 @@ func run() int {
 			if !receivers[i].Active() {
 				continue
 			}
-
 			activeReceivers = append(activeReceivers, receivers[i])
 		}
 

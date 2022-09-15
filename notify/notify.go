@@ -338,7 +338,15 @@ func NewPipelineBuilder(r prometheus.Registerer) *PipelineBuilder {
 }
 
 // New returns a map of receivers to Stages.
-func (pb *PipelineBuilder) New(receivers []*Receiver, wait func() time.Duration, inhibitor *inhibit.Inhibitor, silencer *silence.Silencer, times map[string][]timeinterval.TimeInterval, notificationLog NotificationLog, peer Peer) RoutingStage {
+func (pb *PipelineBuilder) New(
+	receivers []*Receiver,
+	wait func() time.Duration,
+	inhibitor *inhibit.Inhibitor,
+	silencer *silence.Silencer,
+	times map[string][]timeinterval.TimeInterval,
+	notificationLog NotificationLog,
+	peer Peer,
+) RoutingStage {
 	rs := make(RoutingStage, len(receivers))
 
 	ms := NewGossipSettleStage(peer)
