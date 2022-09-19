@@ -35,7 +35,8 @@ type Integration struct {
 	LastError string `json:"lastError,omitempty"`
 
 	// last notify
-	LastNotify string `json:"lastNotify,omitempty"`
+	// Format: date-time
+	LastNotify strfmt.DateTime `json:"lastNotify,omitempty"`
 
 	// last notify duration
 	LastNotifyDuration string `json:"lastNotifyDuration,omitempty"`
@@ -53,6 +54,10 @@ type Integration struct {
 func (m *Integration) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateLastNotify(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateName(formats); err != nil {
 		res = append(res, err)
 	}
@@ -64,6 +69,19 @@ func (m *Integration) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *Integration) validateLastNotify(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.LastNotify) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("lastNotify", "body", "date-time", m.LastNotify.String(), formats); err != nil {
+		return err
+	}
+
 	return nil
 }
 
