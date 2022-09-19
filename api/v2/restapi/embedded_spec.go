@@ -610,7 +610,8 @@ func init() {
           "type": "string"
         },
         "lastNotify": {
-          "type": "string"
+          "type": "string",
+          "format": "date-time"
         },
         "lastNotifyDuration": {
           "type": "string"
@@ -1459,7 +1460,8 @@ func init() {
           "type": "string"
         },
         "lastNotify": {
-          "type": "string"
+          "type": "string",
+          "format": "date-time"
         },
         "lastNotifyDuration": {
           "type": "string"

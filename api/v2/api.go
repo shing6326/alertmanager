@@ -222,7 +222,7 @@ func (api *API) getReceiversHandler(params receiver_ops.GetReceiversParams) midd
 			integrations = append(integrations, &open_api_models.Integration{
 				Name:               &iname,
 				SendResolve:        &sendResolved,
-				LastNotify:         notify.UTC().String(),
+				LastNotify:         strfmt.DateTime(notify.UTC()),
 				LastNotifyDuration: duration.String(),
 				LastError: func() string {
 					if err != nil {

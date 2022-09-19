@@ -525,6 +525,7 @@ definitions:
         type: boolean
       lastNotify:
         type: string
+        format: date-time
       lastNotifyDuration:
         type: string
       lastError:
