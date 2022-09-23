@@ -521,7 +521,7 @@ definitions:
     properties:
       name:
         type: string
-      sendResolve:
+      sendResolved:
         type: boolean
       lastNotify:
         type: string
@@ -532,7 +532,7 @@ definitions:
         type: string
     required:
       - name
-      - sendResolve
+      - sendResolved
   labelSet:
     type: object
     additionalProperties:
