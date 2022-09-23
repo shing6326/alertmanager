@@ -603,7 +603,7 @@ func init() {
       "type": "object",
       "required": [
         "name",
-        "sendResolve"
+        "sendResolved"
       ],
       "properties": {
         "lastError": {
@@ -619,7 +619,7 @@ func init() {
         "name": {
           "type": "string"
         },
-        "sendResolve": {
+        "sendResolved": {
           "type": "boolean"
         }
       }
@@ -1453,7 +1453,7 @@ func init() {
       "type": "object",
       "required": [
         "name",
-        "sendResolve"
+        "sendResolved"
       ],
       "properties": {
         "lastError": {
@@ -1469,7 +1469,7 @@ func init() {
         "name": {
           "type": "string"
         },
-        "sendResolve": {
+        "sendResolved": {
           "type": "boolean"
         }
       }
