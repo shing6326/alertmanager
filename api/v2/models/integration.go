@@ -31,14 +31,14 @@ import (
 // swagger:model integration
 type Integration struct {
 
-	// last attempt
+	// A timestamp indicating the last attempt to deliver a notification regardless of the outcome.
 	// Format: date-time
 	LastAttempt strfmt.DateTime `json:"lastAttempt,omitempty"`
 
-	// last attempt duration
+	// Duration of the last attempt to deliver a notification in humanized format (`1s` or `15ms`, etc).
 	LastAttemptDuration string `json:"lastAttemptDuration,omitempty"`
 
-	// last attempt error
+	// Error string for the last attempt to deliver a notification. Empty If the last attempt was successful.
 	LastAttemptError string `json:"lastAttemptError,omitempty"`
 
 	// name

@@ -524,11 +524,14 @@ definitions:
       sendResolved:
         type: boolean
       lastAttempt:
+        description: A timestamp indicating the last attempt to deliver a notification regardless of the outcome.
         type: string
         format: date-time
       lastAttemptDuration:
+        description: Duration of the last attempt to deliver a notification in humanized format (`1s` or `15ms`, etc).
         type: string
       lastAttemptError:
+        description: Error string for the last attempt to deliver a notification. Empty If the last attempt was successful.
         type: string
     required:
       - name
