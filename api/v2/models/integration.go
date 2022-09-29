@@ -31,15 +31,15 @@ import (
 // swagger:model integration
 type Integration struct {
 
-	// last error
-	LastError string `json:"lastError,omitempty"`
-
-	// last notify
+	// last attempt
 	// Format: date-time
-	LastNotify strfmt.DateTime `json:"lastNotify,omitempty"`
+	LastAttempt strfmt.DateTime `json:"lastAttempt,omitempty"`
 
-	// last notify duration
-	LastNotifyDuration string `json:"lastNotifyDuration,omitempty"`
+	// last attempt duration
+	LastAttemptDuration string `json:"lastAttemptDuration,omitempty"`
+
+	// last attempt error
+	LastAttemptError string `json:"lastAttemptError,omitempty"`
 
 	// name
 	// Required: true
@@ -54,7 +54,7 @@ type Integration struct {
 func (m *Integration) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLastNotify(formats); err != nil {
+	if err := m.validateLastAttempt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -72,13 +72,13 @@ func (m *Integration) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Integration) validateLastNotify(formats strfmt.Registry) error {
+func (m *Integration) validateLastAttempt(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.LastNotify) { // not required
+	if swag.IsZero(m.LastAttempt) { // not required
 		return nil
 	}
 
-	if err := validate.FormatOf("lastNotify", "body", "date-time", m.LastNotify.String(), formats); err != nil {
+	if err := validate.FormatOf("lastAttempt", "body", "date-time", m.LastAttempt.String(), formats); err != nil {
 		return err
 	}
 

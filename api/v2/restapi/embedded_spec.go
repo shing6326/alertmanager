@@ -606,14 +606,14 @@ func init() {
         "sendResolved"
       ],
       "properties": {
-        "lastError": {
-          "type": "string"
-        },
-        "lastNotify": {
+        "lastAttempt": {
           "type": "string",
           "format": "date-time"
         },
-        "lastNotifyDuration": {
+        "lastAttemptDuration": {
+          "type": "string"
+        },
+        "lastAttemptError": {
           "type": "string"
         },
         "name": {
@@ -1456,14 +1456,14 @@ func init() {
         "sendResolved"
       ],
       "properties": {
-        "lastError": {
-          "type": "string"
-        },
-        "lastNotify": {
+        "lastAttempt": {
           "type": "string",
           "format": "date-time"
         },
-        "lastNotifyDuration": {
+        "lastAttemptDuration": {
+          "type": "string"
+        },
+        "lastAttemptError": {
           "type": "string"
         },
         "name": {

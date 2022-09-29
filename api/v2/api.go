@@ -220,11 +220,11 @@ func (api *API) getReceiversHandler(params receiver_ops.GetReceiversParams) midd
 			iname := integration.String()
 			sendResolved := integration.SendResolved()
 			integrations = append(integrations, &open_api_models.Integration{
-				Name:               &iname,
-				SendResolved:       &sendResolved,
-				LastNotify:         strfmt.DateTime(notify.UTC()),
-				LastNotifyDuration: duration.String(),
-				LastError: func() string {
+				Name:                &iname,
+				SendResolved:        &sendResolved,
+				LastAttempt:         strfmt.DateTime(notify.UTC()),
+				LastAttemptDuration: duration.String(),
+				LastAttemptError: func() string {
 					if err != nil {
 						return err.Error()
 					}

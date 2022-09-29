@@ -523,12 +523,12 @@ definitions:
         type: string
       sendResolved:
         type: boolean
-      lastNotify:
+      lastAttempt:
         type: string
         format: date-time
-      lastNotifyDuration:
+      lastAttemptDuration:
         type: string
-      lastError:
+      lastAttemptError:
         type: string
     required:
       - name
