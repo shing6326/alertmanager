@@ -606,14 +606,17 @@ func init() {
         "sendResolved"
       ],
       "properties": {
-        "lastError": {
-          "type": "string"
-        },
-        "lastNotify": {
+        "lastNotifyAttempt": {
+          "description": "A timestamp indicating the last attempt to deliver a notification regardless of the outcome.",
           "type": "string",
           "format": "date-time"
         },
-        "lastNotifyDuration": {
+        "lastNotifyAttemptDuration": {
+          "description": "Duration of the last attempt to deliver a notification in humanized format (` + "`" + `1s` + "`" + ` or ` + "`" + `15ms` + "`" + `, etc).",
+          "type": "string"
+        },
+        "lastNotifyAttemptError": {
+          "description": "Error string for the last attempt to deliver a notification. Empty if the last attempt was successful.",
           "type": "string"
         },
         "name": {
@@ -1456,14 +1459,17 @@ func init() {
         "sendResolved"
       ],
       "properties": {
-        "lastError": {
-          "type": "string"
-        },
-        "lastNotify": {
+        "lastNotifyAttempt": {
+          "description": "A timestamp indicating the last attempt to deliver a notification regardless of the outcome.",
           "type": "string",
           "format": "date-time"
         },
-        "lastNotifyDuration": {
+        "lastNotifyAttemptDuration": {
+          "description": "Duration of the last attempt to deliver a notification in humanized format (` + "`" + `1s` + "`" + ` or ` + "`" + `15ms` + "`" + `, etc).",
+          "type": "string"
+        },
+        "lastNotifyAttemptError": {
+          "description": "Error string for the last attempt to deliver a notification. Empty if the last attempt was successful.",
           "type": "string"
         },
         "name": {
