@@ -66,10 +66,10 @@ type Integration struct {
 	name     string
 	idx      int
 
-	mtx                 sync.RWMutex
-	lastAttempt         time.Time
-	lastAttemptDuration time.Duration
-	lastAttemptError    error
+	mtx                       sync.RWMutex
+	lastNotifyAttempt         time.Time
+	lastNotifyAttemptDuration time.Duration
+	lastNotifyAttemptError    error
 }
 
 // NewIntegration returns a new integration.
@@ -106,16 +106,16 @@ func (i *Integration) Report(start time.Time, duration time.Duration, notifyErro
 	i.mtx.Lock()
 	defer i.mtx.Unlock()
 
-	i.lastAttempt = start
-	i.lastAttemptDuration = duration
-	i.lastAttemptError = notifyError
+	i.lastNotifyAttempt = start
+	i.lastNotifyAttemptDuration = duration
+	i.lastNotifyAttemptError = notifyError
 }
 
 func (i *Integration) GetReport() (time.Time, time.Duration, error) {
 	i.mtx.RLock()
 	defer i.mtx.RUnlock()
 
-	return i.lastAttempt, i.lastAttemptDuration, i.lastAttemptError
+	return i.lastNotifyAttempt, i.lastNotifyAttemptDuration, i.lastNotifyAttemptError
 }
 
 // String implements the Stringer interface.

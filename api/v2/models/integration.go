@@ -33,13 +33,13 @@ type Integration struct {
 
 	// A timestamp indicating the last attempt to deliver a notification regardless of the outcome.
 	// Format: date-time
-	LastAttempt strfmt.DateTime `json:"lastAttempt,omitempty"`
+	LastNotifyAttempt strfmt.DateTime `json:"lastNotifyAttempt,omitempty"`
 
 	// Duration of the last attempt to deliver a notification in humanized format (`1s` or `15ms`, etc).
-	LastAttemptDuration string `json:"lastAttemptDuration,omitempty"`
+	LastNotifyAttemptDuration string `json:"lastNotifyAttemptDuration,omitempty"`
 
-	// Error string for the last attempt to deliver a notification. Empty If the last attempt was successful.
-	LastAttemptError string `json:"lastAttemptError,omitempty"`
+	// Error string for the last attempt to deliver a notification. Empty if the last attempt was successful.
+	LastNotifyAttemptError string `json:"lastNotifyAttemptError,omitempty"`
 
 	// name
 	// Required: true
@@ -54,7 +54,7 @@ type Integration struct {
 func (m *Integration) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateLastAttempt(formats); err != nil {
+	if err := m.validateLastNotifyAttempt(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -72,13 +72,13 @@ func (m *Integration) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Integration) validateLastAttempt(formats strfmt.Registry) error {
+func (m *Integration) validateLastNotifyAttempt(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.LastAttempt) { // not required
+	if swag.IsZero(m.LastNotifyAttempt) { // not required
 		return nil
 	}
 
-	if err := validate.FormatOf("lastAttempt", "body", "date-time", m.LastAttempt.String(), formats); err != nil {
+	if err := validate.FormatOf("lastNotifyAttempt", "body", "date-time", m.LastNotifyAttempt.String(), formats); err != nil {
 		return err
 	}
 
