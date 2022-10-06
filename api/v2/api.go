@@ -104,9 +104,9 @@ func NewAPI(
 	}
 
 	// Load embedded swagger file.
-	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
+	swaggerSpec, err := getSwaggerSpec()
 	if err != nil {
-		return nil, fmt.Errorf("failed to load embedded swagger file: %v", err.Error())
+		return nil, err
 	}
 
 	// Create new service API.
@@ -260,14 +260,14 @@ func (api *API) getAlertsHandler(params alert_ops.GetAlertsParams) middleware.Re
 
 	matchers, err := parseFilter(params.Filter)
 	if err != nil {
-		level.Error(logger).Log("msg", "Failed to parse matchers", "err", err)
+		level.Debug(logger).Log("msg", "Failed to parse matchers", "err", err)
 		return alertgroup_ops.NewGetAlertGroupsBadRequest().WithPayload(err.Error())
 	}
 
 	if params.Receiver != nil {
 		receiverFilter, err = regexp.Compile("^(?:" + *params.Receiver + ")$")
 		if err != nil {
-			level.Error(logger).Log("msg", "Failed to compile receiver regex", "err", err)
+			level.Debug(logger).Log("msg", "Failed to compile receiver regex", "err", err)
 			return alert_ops.
 				NewGetAlertsBadRequest().
 				WithPayload(
@@ -389,7 +389,7 @@ func (api *API) getAlertGroupsHandler(params alertgroup_ops.GetAlertGroupsParams
 
 	matchers, err := parseFilter(params.Filter)
 	if err != nil {
-		level.Error(logger).Log("msg", "Failed to parse matchers", "err", err)
+		level.Debug(logger).Log("msg", "Failed to parse matchers", "err", err)
 		return alertgroup_ops.NewGetAlertGroupsBadRequest().WithPayload(err.Error())
 	}
 
@@ -527,7 +527,7 @@ func (api *API) getSilencesHandler(params silence_ops.GetSilencesParams) middlew
 		for _, matcherString := range params.Filter {
 			matcher, err := labels.ParseMatcher(matcherString)
 			if err != nil {
-				level.Error(logger).Log("msg", "Failed to parse matchers", "err", err)
+				level.Debug(logger).Log("msg", "Failed to parse matchers", "err", err)
 				return alert_ops.NewGetAlertsBadRequest().WithPayload(err.Error())
 			}
 
@@ -704,4 +704,32 @@ func parseFilter(filter []string) ([]*labels.Matcher, error) {
 		matchers = append(matchers, matcher)
 	}
 	return matchers, nil
+}
+
+var (
+	swaggerSpecCacheMx sync.Mutex
+	swaggerSpecCache   *loads.Document
+)
+
+// getSwaggerSpec loads and caches the swagger spec. If a cached version already exists,
+// it returns the cached one. The reason why we cache it is because some downstream projects
+// (e.g. Grafana Mimir) creates many Alertmanager instances in the same process, so they would
+// incur in a significant memory penalty if we would reload the swagger spec each time.
+func getSwaggerSpec() (*loads.Document, error) {
+	swaggerSpecCacheMx.Lock()
+	defer swaggerSpecCacheMx.Unlock()
+
+	// Check if a cached version exists.
+	if swaggerSpecCache != nil {
+		return swaggerSpecCache, nil
+	}
+
+	// Load embedded swagger file.
+	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
+	if err != nil {
+		return nil, fmt.Errorf("failed to load embedded swagger file: %w", err)
+	}
+
+	swaggerSpecCache = swaggerSpec
+	return swaggerSpec, nil
 }
