@@ -68,7 +68,7 @@ type Integration struct {
 
 	mtx                       sync.RWMutex
 	lastNotifyAttempt         time.Time
-	lastNotifyAttemptDuration time.Duration
+	lastNotifyAttemptDuration model.Duration
 	lastNotifyAttemptError    error
 }
 
@@ -102,7 +102,7 @@ func (i *Integration) Index() int {
 	return i.idx
 }
 
-func (i *Integration) Report(start time.Time, duration time.Duration, notifyError error) {
+func (i *Integration) Report(start time.Time, duration model.Duration, notifyError error) {
 	i.mtx.Lock()
 	defer i.mtx.Unlock()
 
@@ -111,7 +111,7 @@ func (i *Integration) Report(start time.Time, duration time.Duration, notifyErro
 	i.lastNotifyAttemptError = notifyError
 }
 
-func (i *Integration) GetReport() (time.Time, time.Duration, error) {
+func (i *Integration) GetReport() (time.Time, model.Duration, error) {
 	i.mtx.RLock()
 	defer i.mtx.RUnlock()
 
@@ -744,7 +744,7 @@ func (r RetryStage) exec(ctx context.Context, l log.Logger, alerts ...*types.Ale
 
 			r.metrics.notificationLatencySeconds.WithLabelValues(r.integration.Name()).Observe(duration.Seconds())
 			r.metrics.numNotificationRequestsTotal.WithLabelValues(r.integration.Name()).Inc()
-			r.integration.Report(now, duration, err)
+			r.integration.Report(now, model.Duration(duration), err)
 			if err != nil {
 				r.metrics.numNotificationRequestsFailedTotal.WithLabelValues(r.integration.Name()).Inc()
 				if !retry {
