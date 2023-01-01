@@ -163,6 +163,23 @@ var DefaultFuncs = FuncMap{
 	"divide": func(a, b int) int {
 		return a / b
 	},
+	"toInt": func(v interface{}) int {
+		switch val := v.(type) {
+		case int:
+			return val
+		case int64:
+			return int(val)
+		case float64:
+			return int(val)
+		case string:
+			i, _ := strconv.Atoi(val)
+			return i
+		case time.Time:
+			return int(val.Unix())
+		default:
+			return 0
+		}
+	},
 }
 
 // Pair is a key/value string pair.
