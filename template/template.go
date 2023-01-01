@@ -153,16 +153,16 @@ var DefaultFuncs = FuncMap{
 		return s
 	},
 	"add": func(a, b int) int {
-		return a + b
+		return b + a
 	},
 	"subtract": func(a, b int) int {
-		return a - b
+		return b - a
 	},
 	"multiply": func(a, b int) int {
-		return a * b
+		return b * a
 	},
 	"divide": func(a, b int) int {
-		return a / b
+		return b / a
 	},
 	"toInt": func(v interface{}) int {
 		switch val := v.(type) {
