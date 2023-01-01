@@ -151,6 +151,18 @@ var DefaultFuncs = FuncMap{
 	"stringSlice": func(s ...string) []string {
 		return s
 	},
+	"add": func(a, b int) int {
+		return a + b
+	},
+	"subtract": func(a, b int) int {
+		return a - b
+	},
+	"multiply": func(a, b int) int {
+		return a * b
+	},
+	"divide": func(a, b int) int {
+		return a / b
+	},
 }
 
 // Pair is a key/value string pair.
